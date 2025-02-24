@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#f3f3f3',
-    height: '55%'
+    height: '50%'
   },
   recommendationImage: {
-    width: wp(50),
+    width: wp(60),
     height: hp(30),
     borderRadius: 10,
   },
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   recommendationText: {
     color: 'white',
     textAlign: 'center',
+    fontSize: 16
   },
 });
 
