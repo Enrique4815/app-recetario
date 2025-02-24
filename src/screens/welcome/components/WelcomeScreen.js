@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useSharedValue, withSpring } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../styles/styles';  // Importa los estilos
+import styles from '../styles/styles';
 import Animated from 'react-native-reanimated';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -34,7 +34,6 @@ export default function WelcomeScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      {/* Logo image with rings */}
       <Animated.View style={[styles.logoWrapper1, { padding: ring1padding }]}>
         <Animated.View style={[styles.logoWrapper2, { padding: ring2padding }]}>
           <Image 
@@ -44,7 +43,6 @@ export default function WelcomeScreen() {
         </Animated.View>
       </Animated.View>
 
-      {/* Title and punchline */}
       <View style={styles.textContainer}>
         <Text style={styles.titleText}>
           Comidas Faciles

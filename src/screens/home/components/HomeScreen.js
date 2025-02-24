@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Importamos los íconos
-import styles from '../styles/styles'; // Importa los estilos
+import Icon from 'react-native-vector-icons/FontAwesome';
+import styles from '../styles/styles';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [selectedIngredient, setSelectedIngredient] = useState(null);
   const [ingredientsList, setIngredientsList] = useState([]);
   const [alertMessage, setAlertMessage] = useState('');
@@ -30,12 +30,29 @@ export default function HomeScreen() {
       id: '1',
       name: 'Pizza con tortilla',
       image: require('./../../../../assets/images/pizza.png'),
+      ingredients: ['Huevo', 'Tomate', 'Cebolla', 'Arroz'],
+      description: 'Una deliciosa pizza con tortilla, fácil y rápida.',
+      steps: [
+        '1. Precalienta el horno a 180°C.',
+        '2. Extiende la tortilla en una bandeja para hornear.',
+        '3. Coloca los ingredientes sobre la tortilla.',
+        '4. Hornea durante 10-12 minutos o hasta que se dore.',
+      ]
     },
     {
       id: '2',
       name: 'Sushi con salmón',
       image: require('./../../../../assets/images/sushi.png'),
-    },
+      ingredients: ['Huevo', 'Tomate', 'Leche'],
+      description: 'Sushi fresco con salmón y un toque especial.',
+      steps: [
+        '1. Cocina el arroz para sushi según las instrucciones del paquete.',
+        '2. Corta el salmón en tiras finas.',
+        '3. Extiende el arroz sobre una hoja de alga nori.',
+        '4. Coloca las tiras de salmón y enróllalo.',
+        '5. Corta en pequeños trozos y sirve con salsa de soya.',
+      ]
+    }
   ];
 
   const addIngredientToList = () => {
@@ -48,9 +65,9 @@ export default function HomeScreen() {
         setIngredientsList((prevList) => {
           const updatedList = [...prevList, ingredient.label];
           setJsonOutput({ ingredients: updatedList });
+          setAlertMessage('');
           return updatedList;
         });
-        setAlertMessage('');
       }
     }
   };
@@ -63,11 +80,18 @@ export default function HomeScreen() {
     });
   };
 
+  const filterRecommendations = () => {
+    return recommendations.filter((recommendation) =>
+      ingredientsList.every((ingredient) =>
+        recommendation.ingredients.includes(ingredient)
+      )
+    );
+  };
+
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
 
-      {/* Título */}
       <View style={styles.titleContainer}>
         <Text style={styles.titleText}>
           Haz que tu
@@ -77,7 +101,6 @@ export default function HomeScreen() {
         </Text>
       </View>
 
-      {/* Dropdown para seleccionar ingrediente */}
       <View style={styles.dropdownContainer}>
         <Dropdown
           data={ingredients}
@@ -90,21 +113,18 @@ export default function HomeScreen() {
         />
       </View>
 
-      {/* Mostrar la alerta si se seleccionó un ingrediente duplicado */}
       {alertMessage ? (
         <View style={styles.alertMessage}>
           <Text>{alertMessage}</Text>
         </View>
       ) : null}
 
-      {/* Botón con solo el ícono de palomita */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={addIngredientToList} style={styles.button}>
           <Icon name="check" size={30} color="#fff" />
         </TouchableOpacity>
       </View>
 
-      {/* Tabla de ingredientes solo si hay ingredientes */}
       {ingredientsList.length > 0 && (
         <View style={styles.tableContainer}>
           <Text style={styles.tableTitle}>Ingredientes seleccionados:</Text>
@@ -118,8 +138,7 @@ export default function HomeScreen() {
               <DataTable.Row key={index}>
                 <DataTable.Cell>{ingredient}</DataTable.Cell>
                 <DataTable.Cell>
-                  {/* Botón con ícono de papelera dentro */}
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     onPress={() => removeIngredient(ingredient)}
                     style={styles.removeButton}
                   >
@@ -133,28 +152,33 @@ export default function HomeScreen() {
       )}
 
       <View>
-        {/* Recomendaciones */}
+
         <View style={styles.recommendationsTitle}>
           <Text>Recomendaciones</Text>
         </View>
 
-        {/* Lista de recomendaciones */}
         <FlatList
           horizontal
-          data={recommendations}
+          data={filterRecommendations()}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <View style={styles.recommendationCard}>
-              <Image source={item.image} style={styles.recommendationImage} />
-              <View style={styles.recommendationOverlay}>
-                <Text style={styles.recommendationText}>{item.name}</Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('RecipeDetail', { recipe: item })
+              }
+            >
+              <View style={styles.recommendationCard}>
+                <Image source={item.image} style={styles.recommendationImage} />
+                <View style={styles.recommendationOverlay}>
+                  <Text style={styles.recommendationText}>{item.name}</Text>
+                </View>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16 }}
         />
-        </View>
+      </View>
     </View>
   );
 }

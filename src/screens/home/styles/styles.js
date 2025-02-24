@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: '#f3f3f3',
-    height: '100%'
+    height: '55%'
   },
   recommendationImage: {
     width: wp(50),
