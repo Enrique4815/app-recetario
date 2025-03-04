@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://192.168.0.197:4000/api/receta';
+//const API_BASE_URL = 'http://192.168.0.197:4000/api/receta';
+const API_BASE_URL = 'https://api-recetas-t0r2.onrender.com/api/receta';
 
 export const fetchRecipes = async () => {
   try {
@@ -23,8 +24,9 @@ export const fetchRecipes = async () => {
 
 export const getRecommendations = async (ingredients) => {
   try {
-    console.log('Ingredientes enviados para recomendaciones:', ingredients); // Verificamos qué datos se envían
+    console.log('Ingredientes enviados para recomendaciones:', ingredients);
 
+    // Enviar el body correctamente formateado con 'ingredients' como array
     const response = await axios.post(`${API_BASE_URL}/recom`, { ingredients });
     console.log('Recomendaciones:', response.data);
 

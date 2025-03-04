@@ -24,7 +24,7 @@ const RecipeDetailScreen = ({ route }) => {
   };
 
   // Mapeo de la imagen de la receta usando el nombre de la imagen desde el objeto 'recipe'
-  const recipeImage = images[recipe.image] || require("../../../../assets/images/welcome.png");
+  const recipeImage = images[recipe.img] || require("../../../../assets/images/welcome.png");
 
   return (
     <ScrollView style={styles.container}>

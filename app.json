@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "my-SETI",
-    "slug": "my-SETI",
+    "name": "Recetario",
+    "slug": "recetario",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/images/welcome.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/images/welcome.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,12 +17,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/images/welcome.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.enriquegaytan.recetario"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/images/welcome.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a0433ece-7aec-41f8-b40a-b13cf57e311a"
+      }
+    },
+    "owner": "enriquegaytan"
   }
 }

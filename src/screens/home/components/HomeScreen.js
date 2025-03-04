@@ -26,7 +26,8 @@ export default function HomeScreen({ navigation }) {
     const fetchFilteredRecipes = async () => {
       if (ingredientsList.length > 0) {
         const data = await getRecommendations(ingredientsList);
-        setRecommendations(data);
+        console.log('Recomendaciones obtenidas desde el backend:', data); // Log para verificar lo que recibimos
+        setRecommendations(data.data || []);  // Asegúrate de que 'data' esté presente en la respuesta
       } else {
         setRecommendations(recipes);
       }
@@ -143,23 +144,30 @@ export default function HomeScreen({ navigation }) {
         <Text>Recomendaciones</Text>
       </View>
 
-      <FlatList
-        horizontal
-        data={recommendations}
-        keyExtractor={(item, index) => item.id || index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}>
-            <View style={styles.recommendationCard}>
-              <Image source={images[item.img] || require("../../../../assets/images/welcome.png")} style={styles.recommendationImage} />
-              <View style={styles.recommendationOverlay}>
-                <Text style={styles.recommendationText}>{item.name}</Text>
+      {recommendations.length === 0 ? (
+        <Text>No hay recetas para los ingredientes seleccionados.</Text>
+      ) : (
+        <FlatList
+          horizontal
+          data={recommendations}
+          keyExtractor={(item, index) => item._id || index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}>
+              <View style={styles.recommendationCard}>
+                <Image
+                  source={images[item.img] || require("../../../../assets/images/welcome.png")}
+                  style={styles.recommendationImage}
+                />
+                <View style={styles.recommendationOverlay}>
+                  <Text style={styles.recommendationText}>{item.name}</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
-      />
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16 }}
+        />
+      )}
     </View>
   );
 }
