@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, Image, ScrollView, StyleSheet } from 'react-native';
 import styles from '../styles/styles';
 
 const RecipeDetailScreen = ({ route }) => {
-  const { recipe } = route.params;
+  const { recipe, selectedIngredients } = route.params;
 
   const images = {
     "img1.png": require("../../../../assets/images/img1.png"),
@@ -23,7 +22,32 @@ const RecipeDetailScreen = ({ route }) => {
     "img14.png": require("../../../../assets/images/img14.png"),
     "img15.png": require("../../../../assets/images/img15.png"),
   };
+
   const recipeImage = images[recipe.img] || require("../../../../assets/images/welcome.png");
+
+  // Función para verificar si el ingrediente está en la lista de ingredientes seleccionados
+  const isIngredientSelected = (ingredientName) => {
+    return selectedIngredients.includes(ingredientName);
+  };
+
+  // Clasificamos los ingredientes en seleccionados y no seleccionados
+  const getClassifiedIngredients = (ingredients) => {
+    const selectedIngredientsList = [];
+    const unselectedIngredientsList = [];
+
+    ingredients.forEach((ingredient) => {
+      if (isIngredientSelected(ingredient.name)) {
+        selectedIngredientsList.push(ingredient);
+      } else {
+        unselectedIngredientsList.push(ingredient);
+      }
+    });
+
+    return { selectedIngredientsList, unselectedIngredientsList };
+  };
+
+  // Obtenemos los ingredientes clasificados
+  const { selectedIngredientsList, unselectedIngredientsList } = getClassifiedIngredients(recipe.ingredients);
 
   return (
     <View style={styles.container}>
@@ -40,13 +64,31 @@ const RecipeDetailScreen = ({ route }) => {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Ingredientes:</Text>
             <View style={styles.ingredientList}>
-              {recipe.ingredients.map((ingredient, index) => (
-                <View key={index} style={styles.ingredientChip}>
-                  <Text style={styles.ingredientText}>
-                    {ingredient.name} ({ingredient.quantity} {ingredient.unit})
-                  </Text>
-                </View>
-              ))}
+              {/* Mostrar ingredientes seleccionados primero */}
+              {selectedIngredientsList.map((ingredient, index) => {
+                const ingredientStyle = styles.selectedIngredient;
+
+                return (
+                  <View key={index} style={[styles.ingredientChip, ingredientStyle]}>
+                    <Text style={styles.ingredientText}>
+                      {ingredient.name} ({ingredient.quantity} {ingredient.unit})
+                    </Text>
+                  </View>
+                );
+              })}
+
+              {/* Luego, mostrar ingredientes no seleccionados */}
+              {unselectedIngredientsList.map((ingredient, index) => {
+                const ingredientStyle = styles.unselectedIngredient;
+
+                return (
+                  <View key={index} style={[styles.ingredientChip, ingredientStyle]}>
+                    <Text style={styles.ingredientText}>
+                      {ingredient.name} ({ingredient.quantity} {ingredient.unit})
+                    </Text>
+                  </View>
+                );
+              })}
             </View>
           </View>
 

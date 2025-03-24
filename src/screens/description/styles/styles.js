@@ -130,6 +130,14 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 8,
   },
+
+  // Nuevos estilos añadidos
+  selectedIngredient: {
+    backgroundColor: 'green', // Verde para ingredientes seleccionados
+  },
+  unselectedIngredient: {
+    backgroundColor: 'red', // Rojo para ingredientes no seleccionados
+  },
 });
 
 export default styles;

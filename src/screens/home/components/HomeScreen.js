@@ -149,12 +149,13 @@ export default function HomeScreen({ navigation }) {
         {recommendations.length === 0 ? (
           <Text>No hay recetas para los ingredientes seleccionados.</Text>
         ) : (
+          // Dentro del renderItem de la FlatList de recetas en HomeScreen
           <FlatList
             horizontal
             data={recommendations}
             keyExtractor={(item, index) => item._id || index.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}>
+              <TouchableOpacity onPress={() => navigation.navigate('RecipeDetail', { recipe: item, selectedIngredients: ingredientsList })}>
                 <View style={styles.recommendationCard}>
                   <Image
                     source={images[item.img] || require("../../../../assets/images/welcome.png")}
