@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Dropdown } from 'react-native-element-dropdown';
 import { DataTable } from 'react-native-paper';
@@ -83,91 +83,94 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="dark" />
+    <ScrollView style={{ backgroundColor: 'white' }}>
+      <View style={styles.container}>
+        <StatusBar style="dark" />
 
-      <View style={styles.titleContainer}>
-        <Text style={styles.titleText}>
-          Haz que tu estancia sea tu <Text style={styles.titleHighlightText}>casa</Text>
-        </Text>
-      </View>
-
-      <View style={styles.dropdownContainer}>
-        <Dropdown
-          data={ingredients}
-          labelField="label"
-          valueField="value"
-          placeholder="Selecciona un ingrediente"
-          value={selectedIngredient}
-          onChange={(item) => setSelectedIngredient(item.value)}
-          style={styles.dropdownStyle}
-        />
-      </View>
-
-      {alertMessage ? (
-        <View style={styles.alertMessage}>
-          <Text>{alertMessage}</Text>
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>
+            Haz que tu estancia sea tu <Text style={styles.titleHighlightText}>casa</Text>
+          </Text>
         </View>
-      ) : null}
 
-      {/* Botón para agregar ingrediente */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={addIngredientToList} style={styles.button}>
-          <Icon name="check" size={30} color="#fff" />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.dropdownRowContainer}>
+          <View style={styles.dropdownContainer}>
+            <Dropdown
+              data={ingredients}
+              labelField="label"
+              valueField="value"
+              placeholder="Selecciona un ingrediente"
+              value={selectedIngredient}
+              onChange={(item) => setSelectedIngredient(item.value)}
+              style={styles.dropdownStyle}
+            />
+          </View>
 
-      {ingredientsList.length > 0 && (
-        <View style={styles.tableContainer}>
-          <Text style={styles.tableTitle}>Ingredientes seleccionados:</Text>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Ingrediente</DataTable.Title>
-              <DataTable.Title>Acción</DataTable.Title>
-            </DataTable.Header>
-
-            {ingredientsList.map((ingredient, index) => (
-              <DataTable.Row key={index}>
-                <DataTable.Cell>{ingredient}</DataTable.Cell>
-                <DataTable.Cell>
-                  <TouchableOpacity onPress={() => removeIngredient(ingredient)} style={styles.removeButton}>
-                    <Icon name="trash" size={20} color="#fff" />
-                  </TouchableOpacity>
-                </DataTable.Cell>
-              </DataTable.Row>
-            ))}
-          </DataTable>
+          {/* Botón para agregar ingrediente */}
+          <TouchableOpacity onPress={addIngredientToList} style={styles.checkButton}>
+            <Icon name="check" size={30} color="#fff" />
+          </TouchableOpacity>
         </View>
-      )}
 
-      <View style={styles.recommendationsTitle}>
-        <Text>Recomendaciones</Text>
-      </View>
 
-      {recommendations.length === 0 ? (
-        <Text>No hay recetas para los ingredientes seleccionados.</Text>
-      ) : (
-        <FlatList
-          horizontal
-          data={recommendations}
-          keyExtractor={(item, index) => item._id || index.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}>
-              <View style={styles.recommendationCard}>
-                <Image
-                  source={images[item.img] || require("../../../../assets/images/welcome.png")}
-                  style={styles.recommendationImage}
-                />
-                <View style={styles.recommendationOverlay}>
-                  <Text style={styles.recommendationText}>{item.name}</Text>
+        {alertMessage ? (
+          <View style={styles.alertMessage}>
+            <Text style={{ color: 'red', fontWeight: 'bold', }}>{alertMessage}</Text>
+          </View>
+        ) : null}
+
+        {ingredientsList.length > 0 && (
+          <View style={styles.tableContainer}>
+            <Text style={styles.tableTitle}>Ingredientes seleccionados:</Text>
+            <DataTable style={styles.dataTable}>
+              <DataTable.Header style={styles.tableHeader}>
+                <DataTable.Title style={styles.tableHeaderCell}>Ingrediente</DataTable.Title>
+                <DataTable.Title style={styles.tableHeaderCell}>Acción</DataTable.Title>
+              </DataTable.Header>
+
+              {ingredientsList.map((ingredient, index) => (
+                <DataTable.Row key={index} style={index % 2 === 0 ? styles.evenRow : styles.oddRow}>
+                  <DataTable.Cell style={styles.tableCell}>{ingredient}</DataTable.Cell>
+                  <DataTable.Cell style={styles.tableCell}>
+                    <TouchableOpacity onPress={() => removeIngredient(ingredient)} style={styles.removeButton}>
+                      <Text style={{ color: '#fff', fontWeight: 'bold' }}>Eliminar</Text>
+                    </TouchableOpacity>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              ))}
+            </DataTable>
+          </View>
+        )}
+
+        <View style={styles.recommendationsTitle}>
+          <Text>Recomendaciones</Text>
+        </View>
+
+        {recommendations.length === 0 ? (
+          <Text>No hay recetas para los ingredientes seleccionados.</Text>
+        ) : (
+          <FlatList
+            horizontal
+            data={recommendations}
+            keyExtractor={(item, index) => item._id || index.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => navigation.navigate('RecipeDetail', { recipe: item })}>
+                <View style={styles.recommendationCard}>
+                  <Image
+                    source={images[item.img] || require("../../../../assets/images/welcome.png")}
+                    style={styles.recommendationImage}
+                  />
+                  <View style={styles.recommendationOverlay}>
+                    <Text style={styles.recommendationText}>{item.name}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          )}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
-        />
-      )}
-    </View>
+              </TouchableOpacity>
+            )}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 16 }}
+          />
+        )}
+      </View>
+    </ScrollView>
   );
 }

@@ -45,7 +45,7 @@ export default function WelcomeScreen() {
 
       <View style={styles.textContainer}>
         <Text style={styles.titleText}>
-          Recetario
+          COOKING
         </Text>
         <Text style={styles.subtitleText}>
           La comida siempre es la correcta

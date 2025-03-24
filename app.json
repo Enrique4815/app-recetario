@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Recetario",
-    "slug": "recetario",
+    "name": "Cooking",
+    "slug": "cooking",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/welcome.png",

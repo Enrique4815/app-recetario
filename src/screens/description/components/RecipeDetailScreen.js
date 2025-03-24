@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import styles from '../styles/styles';
 
 const RecipeDetailScreen = ({ route }) => {
@@ -22,34 +23,47 @@ const RecipeDetailScreen = ({ route }) => {
     "img14.png": require("../../../../assets/images/img14.png"),
     "img15.png": require("../../../../assets/images/img15.png"),
   };
-
-  // Mapeo de la imagen de la receta usando el nombre de la imagen desde el objeto 'recipe'
   const recipeImage = images[recipe.img] || require("../../../../assets/images/welcome.png");
 
   return (
-    <ScrollView style={styles.container}>
-      {/* Imagen del platillo */}
-      <Image source={recipeImage} style={styles.recipeImage} />
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.imageContainer}>
+          <Image source={recipeImage} style={styles.recipeImage} />
+          <View style={styles.overlay} />
+          <Text style={styles.recipeTitle}>{recipe.name}</Text>
+        </View>
 
-      <View style={{ padding: 16 }}>
-        <Text style={styles.recipeTitle}>{recipe.name}</Text>
-        <Text style={styles.description}>{recipe.description}</Text>
+        <View style={styles.detailsContainer}>
+          <Text style={styles.description}>{recipe.description}</Text>
 
-        <Text style={styles.ingredientsTitle}>Ingredientes:</Text>
-        {recipe.ingredients.map((ingredient, index) => (
-          <View key={index} style={styles.ingredientContainer}>
-            <Text style={styles.ingredientText}>
-              - {ingredient.name} ({ingredient.quantity} {ingredient.unit})
-            </Text>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Ingredientes:</Text>
+            <View style={styles.ingredientList}>
+              {recipe.ingredients.map((ingredient, index) => (
+                <View key={index} style={styles.ingredientChip}>
+                  <Text style={styles.ingredientText}>
+                    {ingredient.name} ({ingredient.quantity} {ingredient.unit})
+                  </Text>
+                </View>
+              ))}
+            </View>
           </View>
-        ))}
 
-        <Text style={styles.stepsTitle}>Pasos a seguir:</Text>
-        {recipe.steps.map((step, index) => (
-          <Text key={index} style={styles.stepText}>{step}</Text>
-        ))}
-      </View>
-    </ScrollView>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Pasos a seguir:</Text>
+            {recipe.steps.map((step, index) => (
+              <View key={index} style={styles.stepContainer}>
+                <View style={styles.stepNumber}>
+                  <Text style={styles.stepNumberText}>{index + 1}</Text>
+                </View>
+                <Text style={styles.stepText}>{step}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
